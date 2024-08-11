@@ -19,8 +19,15 @@ class BookFactory extends Factory
         return [
             'key' => Str::uuid()->toString(),
             'title' => $this->faker->sentence,
-            'publication_year' => $this->faker->year,
-            'author_id' => Author::factory(),
+            'publication_year' => $this->faker->year
         ];
+    }
+
+    public function withAuthors($authors = null)
+    {
+        return $this->afterCreating(function (Book $book) use ($authors) {
+            $authors = $authors ?: Author::factory()->count(2)->create();
+            $book->authors()->attach($authors->pluck('id')->toArray());
+        });
     }
 }

@@ -10,11 +10,10 @@ class Book extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'publication_year', 'author_id', 'key'];
+    protected $fillable = ['title', 'publication_year', 'key'];
     protected $hidden = ['id', 'created_at', 'updated_at'];
     protected $casts = [
         'publication_year' => 'integer',
-        'author_id' => 'integer',
     ];
     protected static function boot(): void
     {

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('key')->unique();
             $table->string('title');
             $table->year('publication_year');
-            $table->foreignId('author_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
