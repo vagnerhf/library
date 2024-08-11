@@ -5,6 +5,9 @@ namespace Tests\Feature;
 use App\Models\Loan;
 use App\Models\Book;
 use App\Models\User;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\LoanCreatedNotification;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -78,5 +81,30 @@ class LoanIntegrationTest extends TestCase
             ]);
     }
 
+    public function test_loan_creation_sends_notification_via_queue()
+    {
+        Notification::fake();
+        Queue::fake();
 
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+        $data = [
+            'book_key' => $book->key,
+            'user_email' => $user->email,
+            'loan_date' => now()->toDateString(),
+        ];
+
+        $response = $this->postJson('/api/loans', $data);
+
+        $response->assertStatus(201);
+
+        // Verifica se a notificação foi enviada para a fila
+        Notification::assertSentTo(
+            [$user], LoanCreatedNotification::class
+        );
+
+        // Verifica se o trabalho foi enfileirado
+        Queue::assertPushed(LoanCreatedNotification::class);
+
+    }
 }

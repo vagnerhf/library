@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LoanResource;
 use Illuminate\Http\Request;
+use App\Notifications\LoanCreatedNotification;
 
 class LoanController extends Controller
 {
@@ -38,6 +39,8 @@ class LoanController extends Controller
             'user_id' => $user->id,
             'loan_date' => $validated['loan_date'],
         ]);
+
+        $user->notify(new LoanCreatedNotification($loan));
 
         return new LoanResource($loan->load(['book.authors', 'user']));
     }
