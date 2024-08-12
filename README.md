@@ -123,9 +123,9 @@ No arquivo .env, defina o driver de fila, por exemplo:
 
 Para processar as filas em background, execute:
 
-    ```bash
-        php artisan queue:work
-    ```
+```bash
+    php artisan queue:work
+```
 
 ## Documentação da API
 
@@ -148,6 +148,9 @@ A API segue as convenções RESTful. Abaixo estão as principais rotas disponív
     POST /api/users - Criar um novo usuário (admin)
     PUT /api/users/{email} - Atualizar um usuário existente (admin)
     DELETE /api/users/{email} - Deletar um usuário (admin)
+
+Mais informações em:
+    api/documentation
 
 ## Considerações Finais
 
